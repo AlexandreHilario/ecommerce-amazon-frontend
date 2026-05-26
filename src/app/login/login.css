@@ -1,0 +1,291 @@
+/* LoginPage.module.css */
+
+.root {
+  background: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  background: #e10000;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 16px 60px;
+}
+
+.card {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #eeeeee;
+  margin-bottom: 32px;
+}
+
+.tab {
+  flex: 1;
+  padding: 14px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #888888;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  transition: color 0.2s, border-bottom-color 0.2s;
+}
+
+.tab:hover {
+  color: #e10000;
+}
+
+.tabActive {
+  color: #e10000;
+  border-bottom-color: #e10000;
+}
+
+/* Title */
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  color: #555555;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #666666;
+  text-align: center;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+.sectionLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Form fields */
+.field {
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  color: #444444;
+  margin-bottom: 6px;
+}
+
+.required {
+  color: #e10000;
+  margin-right: 4px;
+}
+
+.field input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #cccccc;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #333333;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.field input:focus {
+  border-color: #e10000;
+}
+
+/* Password wrapper */
+.passWrap {
+  position: relative;
+}
+
+.passWrap input {
+  padding-right: 44px;
+}
+
+.eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #888888;
+  padding: 0;
+}
+
+/* Buttons */
+.btnPrimary {
+  width: 100%;
+  padding: 14px;
+  background: #e10000;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.btnPrimary:hover {
+  background: #c40000;
+}
+
+.btnOutline {
+  width: 100%;
+  padding: 13px;
+  background: #ffffff;
+  color: #e10000;
+  font-size: 15px;
+  font-weight: 700;
+  border: 2px solid #e10000;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnOutline:hover {
+  background: #fff5f5;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.dividerText {
+  font-size: 13px;
+  color: #888888;
+  white-space: nowrap;
+}
+
+/* Forgot */
+.forgot {
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+.forgot span {
+  font-size: 13px;
+  color: #e10000;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.forgot span:hover {
+  text-decoration: underline;
+}
+
+/* Success message */
+.success {
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 6px;
+  padding: 14px;
+  text-align: center;
+  font-size: 14px;
+  color: #2e7d32;
+  margin-bottom: 16px;
+}
+
+/* Terms */
+.terms {
+  font-size: 12px;
+  color: #999999;
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+.terms a {
+  color: #e10000;
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+/* Nome row */
+.nameRow {
+  display: flex;
+  gap: 12px;
+}
+
+.nameRow .field {
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+  .card {
+    max-width: 100%;
+  }
+
+  .nameRow {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+}
