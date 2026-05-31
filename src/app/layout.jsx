@@ -1,8 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import ConditionalLayout from "@/components/layout/ConditionalLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,15 +26,10 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>
-          {/* Header no topo */}
-          <Header />
-          
-          <main className="flex-grow">
+          {/* Controla quando o header e o footer devem ser exibidos */}
+          <ConditionalLayout>
             {children}
-          </main>
-          
-          {/* Footer no fundo */}
-          <Footer />
+          </ConditionalLayout>
         </AuthProvider>
       </body>
     </html>

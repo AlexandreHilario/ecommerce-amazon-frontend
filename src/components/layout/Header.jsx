@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 
 export default function Header() {
@@ -12,13 +14,13 @@ export default function Header() {
         </Link>
 
         {/* Barra de Pesquisa (Escondida em telas muito pequenas) */}
-        <div className="hidden md:flex flex-1 mx-6 items-center h-10 rounded overflow-hidden">
+        <div className="hidden md:flex flex-1 mx-6 items-center h-10 rounded overflow-hidden bg-white">
           <select className="h-full bg-gray-100 text-black px-2 border-r border-gray-300 outline-none text-sm cursor-pointer hover:bg-gray-200">
             <option>Todos</option>
           </select>
           <input 
             type="text" 
-            className="h-full flex-1 px-3 text-black outline-none" 
+            className="h-full flex-1 px-3 bg-white text-black outline-none placeholder-gray-500" 
             placeholder="Pesquisar Amazon.com.br"
           />
           <button className="h-full bg-[#febd69] hover:bg-[#f3a847] px-4 flex items-center justify-center text-black">
