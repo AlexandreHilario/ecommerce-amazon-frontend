@@ -8,6 +8,7 @@ export default function Banner() {
       />
 
       <div className="absolute inset-0 bg-black/40"></div>
+
       <div className="absolute top-1/3 left-10 text-white">
         <h1 className="text-5xl font-bold mb-4">
           Mega Promoções
@@ -16,6 +17,9 @@ export default function Banner() {
         <p className="text-xl mb-4">
           Até 50% OFF em produtos selecionados
         </p>
+        <button className="bg-[#febd69] text-black px-6 py-3 rounded-md font-bold hover:bg-[#f3a847] transition">
+          Ver Ofertas
+        </button>
 
         <button className="bg-[#febd69] text-black px-6 py-3 rounded-md font-bold">
           Comprar Agora
