@@ -7,6 +7,7 @@ export default function Banner() {
         className="w-full h-[450px] object-cover"
       />
 
+      <div className="absolute inset-0 bg-black/40"></div>
       <div className="absolute top-1/3 left-10 text-white">
         <h1 className="text-5xl font-bold mb-4">
           Mega Promoções

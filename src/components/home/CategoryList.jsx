@@ -20,7 +20,7 @@ export default function CategoryList() {
         {categories.map((category) => (
           <div
             key={category}
-            className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer"
+            className="bg-white p-6 rounded-lg shadow hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             <h3 className="font-semibold text-center">
               {category}

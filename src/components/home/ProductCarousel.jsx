@@ -34,7 +34,11 @@ export default function ProductCarousel() {
             key={product.id}
             className="bg-white p-4 rounded-lg shadow"
           >
-            <div className="h-40 bg-gray-200 rounded mb-4"></div>
+            <img
+              src="https://picsum.photos/300/200"
+              alt={product.name}
+              className="w-full h-40 object-cover rounded mb-4"
+            />
 
             <h3 className="font-semibold">
               {product.name}
