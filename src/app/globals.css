@@ -1,26 +1,327 @@
 @import "tailwindcss";
 
+/* ===== AMAZON THEME VARIABLES ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --amazon-orange: #FF9900;
+  --amazon-yellow: #FFD814;
+  --amazon-yellow-hover: #F7CA00;
+  --amazon-yellow-active: #E3B800;
+  --amazon-dark: #131921;
+  --amazon-nav: #232F3E;
+  --amazon-link: #007185;
+  --amazon-link-hover: #C45500;
+  --amazon-text: #0F1111;
+  --amazon-text-secondary: #565959;
+  --amazon-bg: #EAEDED;
+  --amazon-border: #D5D9D9;
+  --amazon-input-border: #888C8C;
+  --amazon-input-focus: #E77600;
+  --amazon-error: #CC0C39;
+  --amazon-error-bg: #FFF6F6;
+  --amazon-error-border: #CC0C39;
+  --amazon-btn-secondary-border: #D5D9D9;
+  --amazon-white: #FFFFFF;
+  --font-amazon: "Amazon Ember", "Helvetica Neue", Roboto, Arial, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--amazon-bg);
+  color: var(--amazon-text);
+  font-family: var(--font-amazon);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ===== AUTH PAGE LAYOUT ===== */
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--amazon-bg);
+  padding-bottom: 40px;
+}
+
+/* ===== AMAZON LOGO ===== */
+.auth-logo {
+  padding: 20px 0 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-logo svg {
+  display: block;
+}
+
+/* ===== AMAZON CARD (white box) ===== */
+.amazon-card {
+  background: var(--amazon-white);
+  border: 1px solid var(--amazon-border);
+  border-radius: 8px;
+  padding: 22px 22px 18px;
+  width: 100%;
+  max-width: 350px;
+  box-sizing: border-box;
+}
+
+/* ===== AMAZON HEADING ===== */
+.amazon-heading {
+  font-size: 28px;
+  font-weight: 400;
+  margin: 0 0 16px;
+  color: var(--amazon-text);
+  line-height: 1.2;
+}
+
+/* ===== AMAZON FORM FIELD ===== */
+.amazon-field {
+  margin-bottom: 12px;
+}
+
+/* ===== AMAZON LABEL ===== */
+.amazon-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--amazon-text);
+  margin-bottom: 2px;
+}
+
+/* ===== AMAZON INPUT ===== */
+.amazon-input {
+  display: block;
+  width: 100%;
+  height: 31px;
+  padding: 3px 7px;
+  font-size: 13px;
+  color: var(--amazon-text);
+  border: 1px solid var(--amazon-input-border);
+  border-radius: 3px;
+  background: var(--amazon-white);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.amazon-input:focus {
+  border-color: var(--amazon-input-focus);
+  box-shadow: 0 0 0 3px rgba(228, 121, 17, 0.5);
+}
+
+.amazon-input-error {
+  border-color: var(--amazon-error) !important;
+}
+
+.amazon-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(204, 12, 57, 0.3) !important;
+}
+
+/* ===== AMAZON FIELD ERROR ===== */
+.amazon-field-error {
+  font-size: 12px;
+  color: var(--amazon-error);
+  margin: 4px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.amazon-field-error::before {
+  content: "⚠";
+  font-size: 11px;
+}
+
+/* ===== AMAZON ERROR BOX ===== */
+.amazon-error-box {
+  background: var(--amazon-error-bg);
+  border: 1px solid var(--amazon-error-border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--amazon-error);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.amazon-error-icon {
+  font-size: 14px;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+
+/* ===== AMAZON PRIMARY BUTTON (yellow) ===== */
+.amazon-btn-primary {
+  display: block;
+  width: 100%;
+  padding: 0;
+  height: 31px;
+  line-height: 29px;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+  background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+  border: 1px solid;
+  border-color: #a88734 #9c7e31 #846a29;
+  border-radius: 3px;
+  color: #111;
+  cursor: pointer;
+  font-family: var(--font-amazon);
+  margin-top: 10px;
+  margin-bottom: 0;
+  box-sizing: border-box;
+  transition: background 0.1s;
+  user-select: none;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset;
+}
+
+.amazon-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #f5d78e, #eeb933);
+  border-color: #a88734 #9c7e31 #846a29;
+}
+
+.amazon-btn-primary:active:not(:disabled) {
+  background: linear-gradient(to bottom, #eeb933, #f5d78e);
+  box-shadow: none;
+}
+
+.amazon-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== AMAZON TERMS ===== */
+.amazon-terms {
+  font-size: 12px;
+  color: var(--amazon-text-secondary);
+  margin: 10px 0 0;
+  line-height: 1.5;
+}
+
+/* ===== AMAZON LINK ===== */
+.amazon-link {
+  color: var(--amazon-link);
+  text-decoration: none;
+}
+
+.amazon-link:hover {
+  color: var(--amazon-link-hover);
+  text-decoration: underline;
+}
+
+/* ===== AMAZON LINK BLOCK (forgot password) ===== */
+.amazon-link-block {
+  display: block;
+  color: var(--amazon-link);
+  text-decoration: none;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+.amazon-link-block:hover {
+  color: var(--amazon-link-hover);
+  text-decoration: underline;
+}
+
+/* ===== AMAZON DIVIDER ===== */
+.amazon-divider {
+  display: flex;
+  align-items: center;
+  margin: 18px 0 10px;
+  gap: 8px;
+}
+
+.amazon-divider::before,
+.amazon-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--amazon-border);
+}
+
+.amazon-divider span {
+  font-size: 12px;
+  color: var(--amazon-text-secondary);
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+/* When divider has no span child (just acts as separator) */
+.amazon-divider:not(:has(span)) {
+  margin: 18px 0 10px;
+}
+
+/* ===== AMAZON SECONDARY BUTTON (gray outline) ===== */
+.amazon-btn-secondary {
+  display: block;
+  width: 100%;
+  height: 29px;
+  line-height: 27px;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+  background: linear-gradient(to bottom, #f7f8f8, #e7e9ec);
+  border: 1px solid var(--amazon-btn-secondary-border);
+  border-radius: 3px;
+  color: var(--amazon-text);
+  cursor: pointer;
+  font-family: var(--font-amazon);
+  box-sizing: border-box;
+  transition: background 0.1s;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+}
+
+.amazon-btn-secondary:hover {
+  background: linear-gradient(to bottom, #e7e9ec, #d9dce1);
+  border-color: #adb1b8 #a2a6ac #8d9096;
+}
+
+/* ===== AUTH FOOTER ===== */
+.auth-footer {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.auth-footer-gradient {
+  height: 44px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.08) 100%);
+  margin-bottom: 10px;
+}
+
+.auth-footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.auth-footer-links a {
+  font-size: 12px;
+  color: var(--amazon-link);
+  text-decoration: none;
+}
+
+.auth-footer-links a:hover {
+  text-decoration: underline;
+  color: var(--amazon-link-hover);
+}
+
+.auth-footer-copy {
+  font-size: 12px;
+  color: var(--amazon-text-secondary);
+  margin: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 400px) {
+  .amazon-card {
+    border: none;
+    border-radius: 0;
+    max-width: 100%;
+    padding: 16px;
+  }
 }
