@@ -1,15 +1,13 @@
-
-
 .root {
-  background: #ffffff;
+  background: #eaeded;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: Arial, sans-serif;
+  font-family: "Amazon Ember", Arial, sans-serif; 
 }
 
 .header {
-  background: #e10000;
+  background: #131921; 
   padding: 12px 24px;
   display: flex;
   align-items: center;
@@ -22,6 +20,10 @@
   letter-spacing: -1px;
 }
 
+.logo span {
+  color: #ff9900;
+}
+
 .body {
   flex: 1;
   display: flex;
@@ -32,7 +34,11 @@
 
 .card {
   width: 100%;
-max-width: 480px;
+  max-width: 480px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 26px;
 }
 
 .tabs {
@@ -48,7 +54,7 @@ max-width: 480px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  color: #888888;
+  color: #555555;
   border-bottom: 3px solid transparent;
   margin-bottom: -2px;
   background: none;
@@ -59,12 +65,12 @@ max-width: 480px;
 }
 
 .tab:hover {
-  color: #e10000;
+  color: #c45500;
 }
 
 .tabActive {
-  color: #e10000;
-  border-bottom-color: #e10000;
+  color: #e47911;
+  border-bottom-color: #e47911;
 }
 
 /* Title */
@@ -79,18 +85,18 @@ max-width: 480px;
 .icon {
   width: 36px;
   height: 36px;
-  color: #555555;
+  color: #232f3e;
 }
 
 .title {
   font-size: 22px;
-  font-weight: 700;
-  color: #333333;
+  font-weight: 400;
+  color: #111111;
 }
 
 .subtitle {
-  font-size: 14px;
-  color: #666666;
+  font-size: 13px;
+  color: #555555;
   text-align: center;
   margin-bottom: 28px;
   line-height: 1.5;
@@ -99,7 +105,7 @@ max-width: 480px;
 .sectionLabel {
   font-size: 14px;
   font-weight: 700;
-  color: #333333;
+  color: #111111;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -112,32 +118,32 @@ max-width: 480px;
 .field label {
   display: block;
   font-size: 13px;
-  color: #444444;
+  font-weight: 700; 
+  color: #111111;
   margin-bottom: 6px;
 }
 
 .required {
-  color: #e10000;
+  color: #c45500; 
   margin-right: 4px;
 }
 
 .field input {
   width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid #cccccc;
-  border-radius: 6px;
+  padding: 10px 12px;
+  border: 1px solid #a6a6a6;
+  border-radius: 3px; 
   font-size: 15px;
-  color: #333333;
+  color: #111111;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
 }
 
 .field input:focus {
-  border-color: #e10000;
-}
+  border-color: #e77600;
+  box-shadow: 0 0 3px rgba(228, 121, 17, 0.5); 
 
-/* Password wrapper */
 .passWrap {
   position: relative;
 }
@@ -155,45 +161,48 @@ max-width: 480px;
   border: none;
   cursor: pointer;
   font-size: 18px;
-  color: #888888;
+  color: #555555;
   padding: 0;
 }
 
 /* Buttons */
 .btnPrimary {
   width: 100%;
-  padding: 14px;
-  background: #e10000;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 700;
-  border: none;
-  border-radius: 6px;
+  padding: 10px;
+  background: #ff9900; 
+  color: #111111; 
+  font-size: 14px;
+  font-weight: 400;
+  border: 1px solid #a88734;
+  border-radius: 3px;
   cursor: pointer;
-  letter-spacing: 0.3px;
   margin-bottom: 8px;
   transition: background 0.2s;
+  box-shadow: 0 1px 0 rgba(255,255,255,.4) inset;
 }
 
 .btnPrimary:hover {
-  background: #c40000;
+  background: #f7dfa5;
+  border-color: #a88734;
 }
 
 .btnOutline {
   width: 100%;
-  padding: 13px;
-  background: #ffffff;
-  color: #e10000;
-  font-size: 15px;
-  font-weight: 700;
-  border: 2px solid #e10000;
-  border-radius: 6px;
+  padding: 10px;
+  background: #eff0f3;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 400;
+  border: 1px solid #cdd0d5;
+  border-radius: 3px;
   cursor: pointer;
   transition: background 0.2s;
+  box-shadow: 0 1px 0 rgba(255,255,255,.4) inset;
 }
 
 .btnOutline:hover {
-  background: #fff5f5;
+  background: #e3e6e6;
+  border-color: #adb1b8;
 }
 
 /* Divider */
@@ -207,12 +216,12 @@ max-width: 480px;
 .dividerLine {
   flex: 1;
   height: 1px;
-  background: #e0e0e0;
+  background: #e7e7e7;
 }
 
 .dividerText {
-  font-size: 13px;
-  color: #888888;
+  font-size: 12px;
+  color: #767676;
   white-space: nowrap;
 }
 
@@ -224,42 +233,44 @@ max-width: 480px;
 
 .forgot span {
   font-size: 13px;
-  color: #e10000;
+  color: #0066c0; 
   cursor: pointer;
   text-decoration: none;
 }
 
 .forgot span:hover {
+  color: #c45500;
   text-decoration: underline;
 }
 
 /* Success message */
 .success {
-  background: #e8f5e9;
-  border: 1px solid #a5d6a7;
-  border-radius: 6px;
+  background: #f4fbf7;
+  border: 1px solid #007600;
+  border-radius: 4px;
   padding: 14px;
   text-align: center;
   font-size: 14px;
-  color: #2e7d32;
+  color: #007600;
   margin-bottom: 16px;
 }
 
 /* Terms */
 .terms {
-  font-size: 12px;
-  color: #999999;
+  font-size: 11px;
+  color: #555555;
   text-align: center;
   margin-top: 20px;
   line-height: 1.6;
 }
 
 .terms a {
-  color: #e10000;
+  color: #0066c0;
   text-decoration: none;
 }
 
 .terms a:hover {
+  color: #c45500;
   text-decoration: underline;
 }
 
@@ -277,6 +288,8 @@ max-width: 480px;
 @media (max-width: 520px) {
   .card {
     max-width: 100%;
+    border: none;
+    padding: 10px;
   }
 
   .nameRow {
