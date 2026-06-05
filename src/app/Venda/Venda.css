@@ -1,0 +1,584 @@
+/* vendas.css — paleta Amazon */
+
+/*
+  Paleta Amazon:
+  --azul-escuro:  #131921  (header)
+  --azul-medio:   #232F3E  (navbar)
+  --laranja:      #FF9900  (destaque/botão primário)
+  --amarelo:      #FEBD69  (hover/secundário)
+  --branco:       #FFFFFF
+  --cinza-fundo:  #F3F3F3
+  --cinza-borda:  #DDDDDD
+  --texto:        #0F1111
+  --texto-suave:  #565959
+*/
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  font-family: Arial, sans-serif;
+  background: #F3F3F3;
+  min-height: 100vh;
+}
+
+/* ── Cabeçalho ─────────────────────────────────────────────── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: #232F3E;
+  padding: 16px 24px;
+  border-radius: 8px;
+}
+
+.titulo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.subtitulo {
+  font-size: 13px;
+  color: #FEBD69;
+  margin: 4px 0 0;
+}
+
+.btnNova {
+  background: #FF9900;
+  color: #131921;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.btnNova:hover {
+  background: #FEBD69;
+}
+
+/* ── Feedback ───────────────────────────────────────────────── */
+.sucessoMsg {
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  color: #2e7d32;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.erro {
+  background: #fdecea;
+  border: 1px solid #f5c6cb;
+  color: #c0392b;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #565959;
+  font-size: 15px;
+}
+
+/* ── Filtros ────────────────────────────────────────────────── */
+.filtros {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #DDDDDD;
+}
+
+.inputBusca {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border: 1.5px solid #DDDDDD;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  color: #0F1111;
+}
+
+.inputBusca:focus {
+  border-color: #FF9900;
+  box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.2);
+}
+
+.selectFiltro {
+  padding: 10px 14px;
+  border: 1.5px solid #DDDDDD;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  cursor: pointer;
+  color: #0F1111;
+}
+
+.selectFiltro:focus {
+  border-color: #FF9900;
+}
+
+.btnFiltrar {
+  padding: 10px 20px;
+  background: #fff;
+  color: #0F1111;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid #FF9900;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnFiltrar:hover {
+  background: #fff8ee;
+}
+
+/* ── Tabela ─────────────────────────────────────────────────── */
+.tabelaWrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #DDDDDD;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: #fff;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabela thead tr {
+  background: #232F3E;
+  border-bottom: 3px solid #FF9900;
+}
+
+.tabela th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 700;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+.tabela tbody tr {
+  border-bottom: 1px solid #F3F3F3;
+  transition: background 0.15s;
+}
+
+.tabela tbody tr:hover {
+  background: #fff8ee;
+}
+
+.tabela td {
+  padding: 14px 16px;
+  color: #0F1111;
+  vertical-align: middle;
+}
+
+.tdId {
+  font-weight: 700;
+  color: #FF9900;
+}
+
+.tdCentro {
+  text-align: center;
+}
+
+.tdTotal {
+  font-weight: 700;
+  color: #0F1111;
+}
+
+.semDados {
+  text-align: center;
+  padding: 40px;
+  color: #aaa;
+  font-size: 15px;
+}
+
+.tagProduto {
+  display: inline-block;
+  background: #F3F3F3;
+  color: #565959;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin: 2px 2px 2px 0;
+}
+
+/* ── Status badges ──────────────────────────────────────────── */
+.status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.statusPago      { background: #e8f5e9; color: #2e7d32; }
+.statusPendente  { background: #fff8e1; color: #f57f17; }
+.statusCancelado { background: #fdecea; color: #c62828; }
+.statusEnviado   { background: #e3f2fd; color: #1565c0; }
+
+/* ── Ações da tabela ────────────────────────────────────────── */
+.tdAcoes {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btnEditar {
+  padding: 6px 12px;
+  background: #fff8ee;
+  color: #FF9900;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 5px;
+  border: 1px solid #FF9900;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnEditar:hover { background: #FEBD69; color: #131921; }
+
+.btnDeletar {
+  padding: 6px 12px;
+  background: #fdecea;
+  color: #c62828;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnDeletar:hover { background: #ffcdd2; }
+
+/* ── Formulário expansível ──────────────────────────────────── */
+.formSection {
+  margin-top: 0;
+  border: 1px solid #DDDDDD;
+  border-top: 3px solid #FF9900;
+  border-radius: 0 0 8px 8px;
+  padding: 28px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  animation: slideDown 0.25s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.formHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #F3F3F3;
+}
+
+.formTitulo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F1111;
+  margin: 0;
+}
+
+.btnFechar {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #565959;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.btnFechar:hover {
+  background: #F3F3F3;
+  color: #0F1111;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formField label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0F1111;
+}
+
+.formField input,
+.formField select {
+  padding: 10px 14px;
+  border: 1.5px solid #DDDDDD;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  color: #0F1111;
+}
+
+.formField input:focus,
+.formField select:focus {
+  border-color: #FF9900;
+  box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.2);
+}
+
+.required { color: #FF9900; }
+
+/* ── Itens ──────────────────────────────────────────────────── */
+.itensSection { margin-bottom: 24px; }
+
+.itensTitulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.itensTitulo h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F1111;
+  margin: 0;
+}
+
+.btnAddItem {
+  padding: 7px 14px;
+  background: #fff;
+  color: #FF9900;
+  font-size: 13px;
+  font-weight: 700;
+  border: 2px solid #FF9900;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnAddItem:hover { background: #fff8ee; }
+
+.itemRow {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: #F3F3F3;
+  border-radius: 6px;
+}
+
+.itemField {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.itemFieldSmall {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 80px;
+}
+
+.itemField label,
+.itemFieldSmall label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #565959;
+}
+
+.itemField input,
+.itemFieldSmall input {
+  padding: 9px 12px;
+  border: 1.5px solid #DDDDDD;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.itemField input:focus,
+.itemFieldSmall input:focus {
+  border-color: #FF9900;
+}
+
+.btnRemoverItem {
+  padding: 9px 12px;
+  background: #fdecea;
+  color: #c62828;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.btnRemoverItem:hover { background: #ffcdd2; }
+
+/* ── Totais preview ─────────────────────────────────────────── */
+.totais {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: flex-end;
+  background: #232F3E;
+  padding: 14px 20px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #FFFFFF;
+  flex-wrap: wrap;
+}
+
+.totalFinal {
+  font-size: 16px;
+  color: #FEBD69;
+}
+
+.totalFinal strong {
+  color: #FF9900;
+  font-size: 18px;
+}
+
+/* ── Botões do form ─────────────────────────────────────────── */
+.formBtns {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btnCancelar {
+  padding: 11px 22px;
+  background: #F3F3F3;
+  color: #0F1111;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #DDDDDD;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnCancelar:hover { background: #e0e0e0; }
+
+.btnSalvar {
+  padding: 11px 24px;
+  background: #FF9900;
+  color: #131921;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnSalvar:hover { background: #FEBD69; }
+
+/* ── Modal ──────────────────────────────────────────────────── */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  border-top: 4px solid #FF9900;
+}
+
+.modal h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F1111;
+  margin-bottom: 12px;
+}
+
+.modal p {
+  font-size: 14px;
+  color: #565959;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.modalBtns {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btnConfirmar {
+  padding: 10px 20px;
+  background: #FF9900;
+  color: #131921;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnConfirmar:hover { background: #FEBD69; }
+
+/* ── Responsivo ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .header         { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .filtros        { flex-direction: column; }
+  .formGrid       { grid-template-columns: 1fr; }
+  .tdAcoes        { flex-direction: column; gap: 4px; }
+  .totais         { justify-content: flex-start; }
+  .formBtns       { flex-direction: column; }
+}
