@@ -22,7 +22,7 @@ export function AdminSidebar() {
     <aside className="sidebar">
       <div className="sidebar-logo">
         <span className="logo-text">amazon</span>
-        <small>seller central</small>
+        <small>Central de admin</small>
       </div>
 
       <nav className="nav-section">
