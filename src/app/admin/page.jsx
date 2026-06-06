@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,20 +12,22 @@ export default function AdminOverviewPage() {
     async function load() {
       try {
         const [usuarios, produtos, vendas] = await Promise.all([
-          fetchWithAuth("/usuario").then((r) => r.json()),
+          fetchWithAuth("/Usuario/listar").then((r) => r.json()),
           fetchWithAuth("/produtos").then((r) => r.json()),
-          fetchWithAuth("/vendas").then((r) => r.json()),
+          fetchWithAuth("/vendas/listar").then((r) => r.json()),
         ]);
 
         const hoje = new Date().toISOString().slice(0, 10);
-        const receitaHoje = vendas
-          .filter((v) => v.dataPedido?.startsWith(hoje))
-          .reduce((acc, v) => acc + (v.total ?? 0), 0);
+        const receitaHoje = Array.isArray(vendas)
+          ? vendas
+              .filter((v) => v.dataVenda?.startsWith(hoje))
+              .reduce((acc, v) => acc + (v.valorTotal ?? 0), 0)
+          : 0;
 
         setResumo({
-          totalUsuarios: usuarios.length,
-          totalProdutos: produtos.length,
-          totalVendas: vendas.length,
+          totalUsuarios: Array.isArray(usuarios) ? usuarios.length : 0,
+          totalProdutos: Array.isArray(produtos) ? produtos.length : 0,
+          totalVendas: Array.isArray(vendas) ? vendas.length : 0,
           receitaHoje,
         });
       } catch (err) {

@@ -23,9 +23,7 @@ export default function UsuariosPage() {
 
   useEffect(() => {
     const q = busca.toLowerCase();
-
     const lista = Array.isArray(usuarios) ? usuarios : [];
-
     setFiltrado(
       lista.filter(
         (u) =>
@@ -37,22 +35,16 @@ export default function UsuariosPage() {
 
   async function carregarUsuarios() {
     try {
-      const res = await fetchWithAuth("/usuario");
+      const res = await fetchWithAuth("/Usuario/listar");
       const data = await res.json();
 
       console.log("Resposta da API:", data);
 
       let lista = [];
-
-      if (Array.isArray(data)) {
-        lista = data;
-      } else if (Array.isArray(data.content)) {
-        lista = data.content;
-      } else if (Array.isArray(data.data)) {
-        lista = data.data;
-      } else if (Array.isArray(data.usuarios)) {
-        lista = data.usuarios;
-      }
+      if (Array.isArray(data)) lista = data;
+      else if (Array.isArray(data.content)) lista = data.content;
+      else if (Array.isArray(data.data)) lista = data.data;
+      else if (Array.isArray(data.usuarios)) lista = data.usuarios;
 
       setUsuarios(lista);
       setFiltrado(lista);
@@ -67,12 +59,8 @@ export default function UsuariosPage() {
 
   async function deletarUsuario(id) {
     if (!confirm("Deseja realmente excluir este usuário?")) return;
-
     try {
-      await fetchWithAuth(`/usuario/${id}`, {
-        method: "DELETE",
-      });
-
+      await fetchWithAuth(`/Usuario/usuario/${id}`, { method: "DELETE" });
       setUsuarios((prev) => prev.filter((u) => u.id !== id));
     } catch (err) {
       console.error("Erro ao deletar:", err);
@@ -81,19 +69,15 @@ export default function UsuariosPage() {
 
   async function salvarEdicao() {
     if (!editando) return;
-
     setSalvando(true);
-
     try {
-      await fetchWithAuth(`/usuario/${editando.id}`, {
+      await fetchWithAuth(`/Usuario/atualizarUsuario/${editando.id}`, {
         method: "PUT",
         body: JSON.stringify(editando),
       });
-
       setUsuarios((prev) =>
         prev.map((u) => (u.id === editando.id ? editando : u))
       );
-
       setEditando(null);
     } catch (err) {
       console.error("Erro ao salvar:", err);
@@ -131,11 +115,9 @@ export default function UsuariosPage() {
                 <th>E-mail</th>
                 <th>Perfil</th>
                 <th>Cadastro</th>
-                <th>Status</th>
                 <th>Ações</th>
               </tr>
             </thead>
-
             <tbody>
               {Array.isArray(filtrado) &&
                 filtrado.map((u, i) => (
@@ -161,40 +143,35 @@ export default function UsuariosPage() {
                       </span>
                       {u.nome}
                     </td>
-
                     <td>{u.email}</td>
-
-                    <td>{u.role}</td>
-
-                    <td>
-                      {u.dataCadastro
-                        ? new Date(u.dataCadastro).toLocaleDateString("pt-BR")
-                        : "—"}
-                    </td>
-
                     <td>
                       <span
                         className={`status ${
-                          u.ativo ? "status-ativo" : "status-inativo"
+                          u.tipoUsuario === "ADMIN"
+                            ? "status-ativo"
+                            : "status-inativo"
                         }`}
                       >
-                        {u.ativo ? "Ativo" : "Inativo"}
+                        {u.tipoUsuario ?? "—"}
                       </span>
                     </td>
-
+                    <td>
+                      {u.criadoEm
+                        ? new Date(u.criadoEm).toLocaleDateString("pt-BR")
+                        : "—"}
+                    </td>
                     <td>
                       <button
                         className="btn-sm"
                         onClick={() => setEditando({ ...u })}
                       >
-                        <i className="ti ti-edit" />
+                        <i className="ti ti-edit" /> Editar
                       </button>
-
                       <button
                         className="btn-sm btn-danger"
                         onClick={() => deletarUsuario(u.id)}
                       >
-                        <i className="ti ti-trash" />
+                        <i className="ti ti-trash" /> Excluir
                       </button>
                     </td>
                   </tr>
@@ -203,12 +180,8 @@ export default function UsuariosPage() {
               {(!Array.isArray(filtrado) || filtrado.length === 0) && (
                 <tr>
                   <td
-                    colSpan={6}
-                    style={{
-                      textAlign: "center",
-                      color: "#999",
-                      padding: 24,
-                    }}
+                    colSpan={5}
+                    style={{ textAlign: "center", color: "#999", padding: 24 }}
                   >
                     Nenhum usuário encontrado.
                   </td>
@@ -239,148 +212,48 @@ export default function UsuariosPage() {
               width: 420,
             }}
           >
-            <h3
-              style={{
-                fontSize: 16,
-                fontWeight: 600,
-                marginBottom: 20,
-              }}
-            >
+            <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 20 }}>
               Editar usuário
             </h3>
 
-            <label
-              style={{
-                fontSize: 12,
-                color: "#777",
-                display: "block",
-                marginBottom: 4,
-              }}
-            >
+            <label style={{ fontSize: 12, color: "#777", display: "block", marginBottom: 4 }}>
               Nome
             </label>
-
             <input
-              style={{
-                width: "100%",
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                borderRadius: 6,
-                marginBottom: 14,
-              }}
+              style={{ width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, marginBottom: 14 }}
               value={editando.nome || ""}
-              onChange={(e) =>
-                setEditando({
-                  ...editando,
-                  nome: e.target.value,
-                })
-              }
+              onChange={(e) => setEditando({ ...editando, nome: e.target.value })}
             />
 
-            <label
-              style={{
-                fontSize: 12,
-                color: "#777",
-                display: "block",
-                marginBottom: 4,
-              }}
-            >
+            <label style={{ fontSize: 12, color: "#777", display: "block", marginBottom: 4 }}>
               E-mail
             </label>
-
             <input
-              style={{
-                width: "100%",
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                borderRadius: 6,
-                marginBottom: 14,
-              }}
+              style={{ width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, marginBottom: 14 }}
               value={editando.email || ""}
-              onChange={(e) =>
-                setEditando({
-                  ...editando,
-                  email: e.target.value,
-                })
-              }
+              onChange={(e) => setEditando({ ...editando, email: e.target.value })}
             />
 
-            <label
-              style={{
-                fontSize: 12,
-                color: "#777",
-                display: "block",
-                marginBottom: 4,
-              }}
-            >
+            <label style={{ fontSize: 12, color: "#777", display: "block", marginBottom: 4 }}>
               Perfil
             </label>
-
             <select
-              style={{
-                width: "100%",
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                borderRadius: 6,
-                marginBottom: 14,
-              }}
-              value={editando.role || "ROLE_USER"}
-              onChange={(e) =>
-                setEditando({
-                  ...editando,
-                  role: e.target.value,
-                })
-              }
+              style={{ width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, marginBottom: 20 }}
+              value={editando.tipoUsuario || "USER"}
+              onChange={(e) => setEditando({ ...editando, tipoUsuario: e.target.value })}
             >
-              <option value="ROLE_ADMIN">Admin</option>
-              <option value="ROLE_USER">Cliente</option>
+              <option value="ADMIN">Admin</option>
+              <option value="USER">Cliente</option>
             </select>
 
-            <label
-              style={{
-                fontSize: 12,
-                color: "#777",
-                display: "block",
-                marginBottom: 4,
-              }}
-            >
-              Status
-            </label>
-
-            <select
-              style={{
-                width: "100%",
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                borderRadius: 6,
-                marginBottom: 20,
-              }}
-              value={editando.ativo ? "true" : "false"}
-              onChange={(e) =>
-                setEditando({
-                  ...editando,
-                  ativo: e.target.value === "true",
-                })
-              }
-            >
-              <option value="true">Ativo</option>
-              <option value="false">Inativo</option>
-            </select>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: 10,
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
               <button
                 className="btn"
+                style={{ background: "#f0f0f0", color: "#333" }}
                 onClick={() => setEditando(null)}
               >
                 Cancelar
               </button>
-
               <button
                 className="btn btn-primary"
                 onClick={salvarEdicao}
