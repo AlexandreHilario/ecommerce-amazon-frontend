@@ -52,7 +52,7 @@ export default function CheckoutPage() {
       <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* ITENS */}
+        
         <div className="md:col-span-2 bg-white p-4 rounded-lg shadow">
           <h2 className="font-semibold mb-4">Itens do pedido</h2>
 
@@ -71,7 +71,7 @@ export default function CheckoutPage() {
           ))}
         </div>
 
-        {/* RESUMO */}
+       
         <div className="bg-white p-4 rounded-lg shadow h-fit">
           <h2 className="font-semibold mb-4">Resumo</h2>
 

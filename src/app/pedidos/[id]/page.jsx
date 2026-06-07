@@ -22,7 +22,7 @@ export default function PedidoDetalhe() {
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
-      {/* HEADER */}
+      
       <div className="bg-white border rounded-lg p-4 mb-6">
         <h1 className="text-xl font-bold">
           Pedido #{pedido.vendaId}
@@ -32,7 +32,7 @@ export default function PedidoDetalhe() {
         </p>
       </div>
 
-      {/* ITENS */}
+      
       <div className="bg-white border rounded-lg">
         <div className="p-4 border-b font-semibold">
           Itens do pedido
@@ -56,7 +56,7 @@ export default function PedidoDetalhe() {
           </div>
         ))}
 
-        {/* TOTAL */}
+        
         <div className="p-4 flex justify-between font-bold">
           <span>Total</span>
           <span>R$ {pedido.valorTotal}</span>
