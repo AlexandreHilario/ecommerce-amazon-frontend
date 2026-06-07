@@ -50,14 +50,9 @@ export default function ProdutosAdminPage() {
       imagem: imagemBase64,
     };
 
-    const url = editandoId ? `/produtos/${editandoId}` : "/produtos";
-    const method = editandoId ? "PUT" : "POST";
-
-    await fetchWithAuth(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-      },
+    await fetchWithAuth(editandoId ? `/produtos/${editandoId}` : "/produtos", {
+      method: editandoId ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(produto),
     });
 
@@ -69,6 +64,7 @@ export default function ProdutosAdminPage() {
       ativo: true,
       imagem: null,
     });
+
     setEditandoId(null);
     carregarProdutos();
   }
@@ -96,12 +92,17 @@ export default function ProdutosAdminPage() {
   }
 
   return (
-    <main className="admin-page">
-      <h1>Produtos</h1>
+    <div className="admin-content">
+      <div className="table-header">
+        <span>Produtos</span>
+        <button className="btn btn-primary" type="submit" form="form-produto">
+          {editandoId ? "Salvar alterações" : "Criar produto"}
+        </button>
+      </div>
 
-      <form className="admin-form" onSubmit={salvarProduto}>
+      <form id="form-produto" className="search-bar" onSubmit={salvarProduto}>
         <input
-          placeholder="Nome do produto"
+          placeholder="Nome"
           value={form.nome}
           onChange={(e) => setForm({ ...form, nome: e.target.value })}
           required
@@ -144,40 +145,55 @@ export default function ProdutosAdminPage() {
           accept="image/*"
           onChange={(e) => setForm({ ...form, imagem: e.target.files[0] })}
         />
-
-        <button type="submit">
-          {editandoId ? "Salvar alterações" : "Criar produto"}
-        </button>
       </form>
 
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>Estoque</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {produtos.map((produto) => (
-            <tr key={produto.id}>
-              <td>{produto.nome}</td>
-              <td>R$ {Number(produto.preco).toFixed(2)}</td>
-              <td>{produto.estoque}</td>
-              <td>{produto.ativo ? "Ativo" : "Inativo"}</td>
-              <td>
-                <button onClick={() => editarProduto(produto)}>Editar</button>
-                <button onClick={() => deletarProduto(produto.id)}>
-                  Excluir
-                </button>
-              </td>
+      <div className="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Preço</th>
+              <th>Estoque</th>
+              <th>Status</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </main>
+          </thead>
+
+          <tbody>
+            {produtos.map((produto) => (
+              <tr key={produto.id}>
+                <td>{produto.nome}</td>
+                <td>R$ {Number(produto.preco).toFixed(2)}</td>
+                <td>{produto.estoque}</td>
+                <td>
+                  <span
+                    className={`status ${
+                      produto.ativo ? "status-ativo" : "status-inativo"
+                    }`}
+                  >
+                    {produto.ativo ? "Ativo" : "Inativo"}
+                  </span>
+                </td>
+                <td>
+                  <button
+                    className="btn-sm"
+                    onClick={() => editarProduto(produto)}
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    className="btn-sm btn-danger"
+                    onClick={() => deletarProduto(produto.id)}
+                  >
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
