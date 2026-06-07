@@ -49,7 +49,7 @@ export default function PedidosPage() {
             key={pedido.vendaId}
             className="bg-white border rounded-lg shadow-sm overflow-hidden"
           >
-            {/* HEADER DO PEDIDO */}
+            
             <div className="bg-gray-50 px-4 py-3 flex justify-between items-center border-b">
               <div>
                 <p className="text-sm text-gray-500">Pedido</p>
@@ -70,7 +70,7 @@ export default function PedidosPage() {
               </span>
             </div>
 
-            {/* BODY */}
+           
             <div className="p-4 flex justify-between items-center">
               <div className="text-sm text-gray-600">
                 <p>
