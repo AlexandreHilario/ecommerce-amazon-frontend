@@ -1,45 +1,45 @@
 "use client";
 
-import { useState } from "react";
 import useCartStore from "@/store/cartStore";
-import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
-import { finalizarCompra } from "@/services/vendaService";
+import { criarVenda } from "@/services/vendaService";
+import { useState } from "react";
 
 export default function CheckoutPage() {
   const router = useRouter();
-
   const { items, getTotal, clearCart } = useCartStore();
-  const { user } = useAuthStore();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const subtotal = getTotal();
-  const shipping = subtotal > 299 ? 0 : 19.9;
-  const total = subtotal + shipping;
+  const total = getTotal();
 
-  const handleCheckout = async () => {
+  const handleFinalizar = async () => {
+    setLoading(true);
     setError("");
 
-    if (!user?.id) {
-      setError("Usuário não identificado. Faça login novamente.");
-      return;
-    }
-
-    if (items.length === 0) {
-      setError("Carrinho vazio.");
-      return;
-    }
-
     try {
-      setLoading(true);
+      const user = JSON.parse(localStorage.getItem("user"));
 
-      const venda = await finalizarCompra(user.id);
+      if (!user?.id) {
+        throw new Error("Usuário não encontrado");
+      }
+
+      
+      const venda = {
+        usuarioId: user.id,
+        itens: items.map((item) => ({
+          produtoId: item.id,
+          quantidade: item.quantity,
+          precoUnitario: item.price || 0,
+        })),
+      };
+
+      await criarVenda(venda);
 
       clearCart();
 
-      router.push(`/pedidos/${venda.vendaId || venda.id}`);
+      router.push("/pedidos");
     } catch (err) {
       setError(err.message || "Erro ao finalizar compra");
     } finally {
@@ -47,57 +47,61 @@ export default function CheckoutPage() {
     }
   };
 
+  if (!items || items.length === 0) {
+    return (
+      <div className="p-10 text-center">
+        <h1 className="text-xl font-bold">Seu carrinho está vazio</h1>
+      </div>
+    );
+  }
+
   return (
-    <main className="max-w-5xl mx-auto px-4 py-10">
+    <main className="max-w-5xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <div className="md:col-span-2 bg-white p-4 rounded-lg shadow">
-          <h2 className="font-semibold mb-4">Itens do pedido</h2>
 
+        {/* ITENS */}
+        <div className="md:col-span-2 space-y-4">
           {items.map((item) => (
             <div
               key={item.id}
-              className="flex justify-between border-b py-2 text-sm"
+              className="border p-4 rounded-lg bg-white"
             >
-              <span>
-                {item.name} x {item.quantity}
-              </span>
-              <span>
-                R$ {(item.price * item.quantity).toFixed(2)}
-              </span>
+              <p className="font-medium">
+                {item.name || "Produto"}
+              </p>
+
+              <p>Qtd: {item.quantity}</p>
+
+              <p>
+                R$ {(item.price || 0).toFixed(2)}
+              </p>
             </div>
           ))}
         </div>
 
-       
-        <div className="bg-white p-4 rounded-lg shadow h-fit">
-          <h2 className="font-semibold mb-4">Resumo</h2>
+      
+        <div className="border p-4 rounded-lg bg-white h-fit">
+          <h2 className="font-bold mb-4">Resumo</h2>
 
-          <div className="text-sm space-y-2">
-            <p>Subtotal: R$ {subtotal.toFixed(2)}</p>
-            <p>Frete: {shipping === 0 ? "Grátis" : `R$ ${shipping}`}</p>
-
-            <hr />
-
-            <p className="font-bold">
-              Total: R$ {total.toFixed(2)}
-            </p>
-          </div>
+          <p>
+            Total: <b>R$ {total.toFixed(2)}</b>
+          </p>
 
           {error && (
-            <p className="text-red-500 text-sm mt-3">{error}</p>
+            <p className="text-red-500 mt-2">{error}</p>
           )}
 
           <button
-            onClick={handleCheckout}
+            onClick={handleFinalizar}
             disabled={loading}
-            className="w-full mt-4 bg-green-600 text-white py-2 rounded"
+            className="w-full mt-4 bg-yellow-400 hover:bg-yellow-500 font-bold py-2 rounded"
           >
             {loading ? "Finalizando..." : "Finalizar compra"}
           </button>
         </div>
+
       </div>
     </main>
   );

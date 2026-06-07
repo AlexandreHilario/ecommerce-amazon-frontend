@@ -1,97 +1,96 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 const getHeaders = () => {
-    const token =
-    typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    return {
-    'Content-Type': 'application/json',
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  return {
+    "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 };
 
-  export const listarVendas = async (filtros = {}) => {
-  const params = new URLSearchParams(
-    Object.fromEntries(Object.entries(filtros).filter(([, v]) => v != null))
+//
+// 🔥 FINALIZAR COMPRA (CHECKOUT)
+// POST /vendas/finalizar/{usuarioId}
+//
+export const finalizarCompra = async (usuarioId) => {
+  const res = await fetch(
+    `${BASE_URL}/vendas/finalizar/${usuarioId}`,
+    {
+      method: "POST",
+      headers: getHeaders(),
+    }
   );
- 
-  const res = await fetch(`${BASE_URL}/vendas?${params}`, {
-    method: 'GET',
-    headers: getHeaders(),
-  });
- 
-  return handleResponse(res);
+
+  if (!res.ok) throw new Error("Erro ao finalizar compra");
+
+  return res.json();
 };
- 
-/**
- * Busca uma venda pelo ID
- * @param {string|number} id
- */
-export const buscarVenda = async (id) => {
+
+//
+// 🔥 HISTÓRICO DE PEDIDOS
+// GET /vendas/historico/{usuarioId}
+//
+export const historicoPedidos = async (usuarioId) => {
+  const res = await fetch(
+    `${BASE_URL}/vendas/historico/${usuarioId}`,
+    {
+      method: "GET",
+      headers: getHeaders(),
+    }
+  );
+
+  if (!res.ok) throw new Error("Erro ao buscar pedidos");
+
+  return res.json();
+};
+
+//
+// 🔥 DETALHE DO PEDIDO
+// GET /vendas/{id}
+//
+export const buscarPedido = async (id) => {
   const res = await fetch(`${BASE_URL}/vendas/${id}`, {
-    method: 'GET',
+    method: "GET",
     headers: getHeaders(),
   });
- 
-  return handleResponse(res);
+
+  if (!res.ok) throw new Error("Erro ao buscar pedido");
+
+  return res.json();
 };
- 
-/**
- // calcula os totais automaticamente antes de enviar
- * @param {Object} venda - { clienteId, itens: [{ produtoId, quantidade, precoUnitario, desconto? }], ... }
- */
-export const criarVenda = async (venda) => {
-  const totais = calcularTotais(venda.itens || []);
- 
-  const payload = {
-    ...venda,
-    ...totais,
-    dataCriacao: new Date().toISOString(),
-    status: venda.status || 'pendente',
-  };
- 
-  const res = await fetch(`${BASE_URL}/vendas`, {
-    method: 'POST',
+
+//
+// 🔥 LISTAR TODAS (ADMIN)
+// GET /vendas/listar
+//
+export const listarVendas = async () => {
+  const res = await fetch(`${BASE_URL}/vendas/listar`, {
+    method: "GET",
     headers: getHeaders(),
-    body: JSON.stringify(payload),
   });
- 
-  return handleResponse(res);
+
+  if (!res.ok) throw new Error("Erro ao listar vendas");
+
+  return res.json();
 };
- 
-/**
- * Edita uma venda existente — recalcula totais se itens forem alterados
- * @param {string|number} id
- * @param {Object} dadosAtualizados
- */
-export const editarVenda = async (id, dadosAtualizados) => {
-  const totais = dadosAtualizados.itens
-    ? calcularTotais(dadosAtualizados.itens)
-    : {};
- 
-  const payload = {
-    ...dadosAtualizados,
-    ...totais,
-    dataAtualizacao: new Date().toISOString(),
-  };
- 
-  const res = await fetch(`${BASE_URL}/vendas/${id}`, {
-    method: 'PUT',
-    headers: getHeaders(),
-    body: JSON.stringify(payload),
-  });
- 
-  return handleResponse(res);
-};
- 
-/**
- * Deleta uma venda pelo ID
- * @param {string|number} id
- */
-export const deletarVenda = async (id) => {
-  const res = await fetch(`${BASE_URL}/vendas/${id}`, {
-    method: 'DELETE',
-    headers: getHeaders(),
-  });
- 
-  return handleResponse(res);
+
+//
+// 🔥 ALTERAR STATUS DO PEDIDO
+// PATCH /vendas/{id}/status?status=ENTREGUE
+//
+export const atualizarStatusVenda = async (id, status) => {
+  const res = await fetch(
+    `${BASE_URL}/vendas/${id}/status?status=${status}`,
+    {
+      method: "PATCH",
+      headers: getHeaders(),
+    }
+  );
+
+  if (!res.ok) throw new Error("Erro ao atualizar status");
+
+  return res.json();
 };
