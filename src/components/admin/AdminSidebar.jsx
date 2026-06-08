@@ -15,6 +15,8 @@ export function AdminSidebar() {
 
   function handleLogout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    document.cookie = "token=; path=/; max-age=0";
     window.location.href = "/login";
   }
 
@@ -40,6 +42,10 @@ export function AdminSidebar() {
       </nav>
 
       <div className="nav-bottom">
+        <Link href="/" className="nav-item" style={{ marginBottom: 8 }}>
+          <i className="ti ti-home" />
+          Ir para a loja
+        </Link>
         <button onClick={handleLogout} className="nav-item logout-btn">
           <i className="ti ti-logout" />
           Sair

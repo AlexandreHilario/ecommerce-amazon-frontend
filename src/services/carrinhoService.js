@@ -1,32 +1,33 @@
-import api from "./api"
+import api from "@/lib/axios";
 
 export const carrinhoService = {
-  getCarrinho: async (usuarioId) => {
-    const response = await api.get(`/carrinho/${usuarioId}`)
-    return response.data
+  async criar(usuarioId) {
+    const response = await api.post(`/carrinhos/usuario/${usuarioId}`);
+    return response.data;
   },
 
-  adicionarItem: async (usuarioId, produtoId, quantidade) => {
-    const response = await api.post(`/carrinho/${usuarioId}/produto/${produtoId}`, {
+  async buscar(usuarioId) {
+    const response = await api.get(`/carrinhos/usuario/${usuarioId}`);
+    return response.data;
+  },
+
+  async adicionarProduto(carrinhoId, produtoId, quantidade) {
+    const response = await api.post(`/carrinhos/${carrinhoId}/produtos`, {
+      produtoId,
       quantidade,
-    })
-    return response.data
+    });
+    return response.data;
   },
 
-  removerItem: async (usuarioId, produtoId) => {
-    const response = await api.delete(`/carrinho/${usuarioId}/produto/${produtoId}`)
-    return response.data
+  async atualizarQuantidade(carrinhoId, produtoId, quantidade) {
+    await api.patch(`/carrinhos/${carrinhoId}/produtos/${produtoId}`, { quantidade });
   },
 
-  atualizarQuantidade: async (usuarioId, produtoId, quantidade) => {
-    const response = await api.put(`/carrinho/${usuarioId}/produto/${produtoId}`, {
-      quantidade,
-    })
-    return response.data
+  async removerProduto(carrinhoId, produtoId) {
+    await api.delete(`/carrinhos/${carrinhoId}/produtos/${produtoId}`);
   },
 
-  limparCarrinho: async (usuarioId) => {
-    const response = await api.delete(`/carrinho/${usuarioId}/limpar`)
-    return response.data
+  async limpar(carrinhoId) {
+    await api.delete(`/carrinhos/${carrinhoId}/limpar`);
   },
-}
+};

@@ -1,199 +1,115 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchWithAuth } from "@/lib/fecthWinthAuth";
+import Link from "next/link";
+import { adminService } from "@/services/adminService";
 
-export default function ProdutosAdminPage() {
+export default function AdminProdutosPage() {
   const [produtos, setProdutos] = useState([]);
-  const [form, setForm] = useState({
-    nome: "",
-    descricao: "",
-    preco: "",
-    estoque: "",
-    ativo: true,
-    imagem: null,
-  });
-  const [editandoId, setEditandoId] = useState(null);
-
-  async function carregarProdutos() {
-    const response = await fetchWithAuth("/produtos");
-    const data = await response.json();
-    setProdutos(data);
-  }
+  const [filtrado, setFiltrado] = useState([]);
+  const [busca, setBusca] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    carregarProdutos();
+    adminService.produtos
+      .listar()
+      .then((data) => {
+        const lista = Array.isArray(data) ? data : [];
+        setProdutos(lista);
+        setFiltrado(lista);
+      })
+      .catch(() => { setProdutos([]); setFiltrado([]); })
+      .finally(() => setLoading(false));
   }, []);
 
-  function converterImagemBase64(file) {
-    return new Promise((resolve, reject) => {
-      if (!file) return resolve(null);
-
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
-  async function salvarProduto(e) {
-    e.preventDefault();
-
-    const imagemBase64 = await converterImagemBase64(form.imagem);
-
-    const produto = {
-      nome: form.nome,
-      descricao: form.descricao,
-      preco: Number(form.preco),
-      estoque: Number(form.estoque),
-      ativo: form.ativo,
-      imagem: imagemBase64,
-    };
-
-    await fetchWithAuth(editandoId ? `/produtos/${editandoId}` : "/produtos", {
-      method: editandoId ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(produto),
-    });
-
-    setForm({
-      nome: "",
-      descricao: "",
-      preco: "",
-      estoque: "",
-      ativo: true,
-      imagem: null,
-    });
-
-    setEditandoId(null);
-    carregarProdutos();
-  }
-
-  function editarProduto(produto) {
-    setEditandoId(produto.id);
-    setForm({
-      nome: produto.nome,
-      descricao: produto.descricao || "",
-      preco: produto.preco,
-      estoque: produto.estoque,
-      ativo: produto.ativo,
-      imagem: null,
-    });
-  }
+  useEffect(() => {
+    const q = busca.toLowerCase();
+    setFiltrado(produtos.filter((p) => p.nome?.toLowerCase().includes(q)));
+  }, [busca, produtos]);
 
   async function deletarProduto(id) {
-    if (!confirm("Deseja excluir este produto?")) return;
-
-    await fetchWithAuth(`/produtos/${id}`, {
-      method: "DELETE",
-    });
-
-    carregarProdutos();
+    if (!confirm("Deseja realmente excluir este produto?")) return;
+    try {
+      await adminService.produtos.deletar(id);
+      setProdutos((prev) => prev.filter((p) => p.id !== id));
+    } catch (err) {
+      alert(err.response?.data?.erro ?? "Erro ao excluir produto.");
+    }
   }
 
   return (
-    <div className="admin-content">
-      <div className="table-header">
-        <span>Produtos</span>
-        <button className="btn btn-primary" type="submit" form="form-produto">
-          {editandoId ? "Salvar alterações" : "Criar produto"}
-        </button>
+    <div>
+      <div style={{ marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <h2 style={{ fontSize: 18, fontWeight: 600 }}>Produtos</h2>
+          <p style={{ fontSize: 13, color: "#777", marginTop: 2 }}>
+            {produtos.length} produto{produtos.length !== 1 ? "s" : ""} cadastrado{produtos.length !== 1 ? "s" : ""}
+          </p>
+        </div>
+        <Link href="/admin/produtos/novo" className="btn btn-primary" style={{ textDecoration: "none" }}>
+          + Novo Produto
+        </Link>
       </div>
 
-      <form id="form-produto" className="search-bar" onSubmit={salvarProduto}>
+      <div className="search-bar">
         <input
-          placeholder="Nome"
-          value={form.nome}
-          onChange={(e) => setForm({ ...form, nome: e.target.value })}
-          required
+          type="text"
+          placeholder="Buscar por nome..."
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
         />
+      </div>
 
-        <input
-          placeholder="Descrição"
-          value={form.descricao}
-          onChange={(e) => setForm({ ...form, descricao: e.target.value })}
-        />
-
-        <input
-          type="number"
-          placeholder="Preço"
-          value={form.preco}
-          onChange={(e) => setForm({ ...form, preco: e.target.value })}
-          required
-        />
-
-        <input
-          type="number"
-          placeholder="Estoque"
-          value={form.estoque}
-          onChange={(e) => setForm({ ...form, estoque: e.target.value })}
-          required
-        />
-
-        <select
-          value={form.ativo}
-          onChange={(e) =>
-            setForm({ ...form, ativo: e.target.value === "true" })
-          }
-        >
-          <option value="true">Ativo</option>
-          <option value="false">Inativo</option>
-        </select>
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setForm({ ...form, imagem: e.target.files[0] })}
-        />
-      </form>
-
-      <div className="table-card">
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Preço</th>
-              <th>Estoque</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {produtos.map((produto) => (
-              <tr key={produto.id}>
-                <td>{produto.nome}</td>
-                <td>R$ {Number(produto.preco).toFixed(2)}</td>
-                <td>{produto.estoque}</td>
-                <td>
-                  <span
-                    className={`status ${
-                      produto.ativo ? "status-ativo" : "status-inativo"
-                    }`}
-                  >
-                    {produto.ativo ? "Ativo" : "Inativo"}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    className="btn-sm"
-                    onClick={() => editarProduto(produto)}
-                  >
-                    Editar
-                  </button>
-
-                  <button
-                    className="btn-sm btn-danger"
-                    onClick={() => deletarProduto(produto.id)}
-                  >
-                    Excluir
-                  </button>
-                </td>
+      {loading ? (
+        <p style={{ fontSize: 14, color: "#666" }}>Carregando...</p>
+      ) : (
+        <div className="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Status</th>
+                <th>Ações</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {filtrado.map((p) => (
+                <tr key={p.id}>
+                  <td>
+                    <div style={{ fontWeight: 500 }}>{p.nome}</div>
+                    <div style={{ fontSize: 12, color: "#999", marginTop: 2 }}>{p.descricao?.slice(0, 60)}{p.descricao?.length > 60 ? "..." : ""}</div>
+                  </td>
+                  <td>R$ {p.preco?.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+                  <td>{p.estoque}</td>
+                  <td>
+                    <span className={`status ${p.ativo ? "status-ativo" : "status-inativo"}`}>
+                      {p.ativo ? "Ativo" : "Inativo"}
+                    </span>
+                  </td>
+                  <td>
+                    <Link href={`/admin/produtos/editar/${p.id}`} className="btn-sm" style={{ textDecoration: "none", marginRight: 6 }}>
+                      <i className="ti ti-edit" /> Editar
+                    </Link>
+                    <button className="btn-sm btn-danger" onClick={() => deletarProduto(p.id)}>
+                      <i className="ti ti-trash" /> Excluir
+                    </button>
+                  </td>
+                </tr>
+              ))}
+
+              {filtrado.length === 0 && (
+                <tr>
+                  <td colSpan={5} style={{ textAlign: "center", color: "#999", padding: 24 }}>
+                    Nenhum produto encontrado.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

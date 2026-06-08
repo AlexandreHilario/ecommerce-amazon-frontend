@@ -1,96 +1,30 @@
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+import api from "@/lib/axios";
 
-const getHeaders = () => {
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+export const vendaService = {
+  async finalizar(usuarioId) {
+    const response = await api.post(`/vendas/finalizar/${usuarioId}`);
+    return response.data;
+  },
 
-  return {
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-};
+  async buscarPorId(id) {
+    const response = await api.get(`/vendas/${id}`);
+    return response.data;
+  },
 
-//
-// 🔥 FINALIZAR COMPRA (CHECKOUT)
-// POST /vendas/finalizar/{usuarioId}
-//
-export const finalizarCompra = async (usuarioId) => {
-  const res = await fetch(
-    `${BASE_URL}/vendas/finalizar/${usuarioId}`,
-    {
-      method: "POST",
-      headers: getHeaders(),
-    }
-  );
+  async historico(usuarioId) {
+    const response = await api.get(`/vendas/historico/${usuarioId}`);
+    return response.data;
+  },
 
-  if (!res.ok) throw new Error("Erro ao finalizar compra");
+  async listar() {
+    const response = await api.get("/vendas/listar");
+    return response.data;
+  },
 
-  return res.json();
-};
-
-//
-// 🔥 HISTÓRICO DE PEDIDOS
-// GET /vendas/historico/{usuarioId}
-//
-export const historicoPedidos = async (usuarioId) => {
-  const res = await fetch(
-    `${BASE_URL}/vendas/historico/${usuarioId}`,
-    {
-      method: "GET",
-      headers: getHeaders(),
-    }
-  );
-
-  if (!res.ok) throw new Error("Erro ao buscar pedidos");
-
-  return res.json();
-};
-
-//
-// 🔥 DETALHE DO PEDIDO
-// GET /vendas/{id}
-//
-export const buscarPedido = async (id) => {
-  const res = await fetch(`${BASE_URL}/vendas/${id}`, {
-    method: "GET",
-    headers: getHeaders(),
-  });
-
-  if (!res.ok) throw new Error("Erro ao buscar pedido");
-
-  return res.json();
-};
-
-//
-// 🔥 LISTAR TODAS (ADMIN)
-// GET /vendas/listar
-//
-export const listarVendas = async () => {
-  const res = await fetch(`${BASE_URL}/vendas/listar`, {
-    method: "GET",
-    headers: getHeaders(),
-  });
-
-  if (!res.ok) throw new Error("Erro ao listar vendas");
-
-  return res.json();
-};
-
-//
-// 🔥 ALTERAR STATUS DO PEDIDO
-// PATCH /vendas/{id}/status?status=ENTREGUE
-//
-export const atualizarStatusVenda = async (id, status) => {
-  const res = await fetch(
-    `${BASE_URL}/vendas/${id}/status?status=${status}`,
-    {
-      method: "PATCH",
-      headers: getHeaders(),
-    }
-  );
-
-  if (!res.ok) throw new Error("Erro ao atualizar status");
-
-  return res.json();
+  async atualizarStatus(id, status) {
+    const response = await api.patch(`/vendas/${id}/status`, null, {
+      params: { status },
+    });
+    return response.data;
+  },
 };

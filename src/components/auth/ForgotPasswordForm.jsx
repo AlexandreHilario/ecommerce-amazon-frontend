@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import { authService } from "@/services/authService";
 
 const schema = z.object({
   email: z.string().min(1, "Informe seu e-mail").email("E-mail inválido"),
@@ -13,6 +14,7 @@ const schema = z.object({
 export default function ForgotPasswordForm() {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
 
   const {
     register,
@@ -20,11 +22,17 @@ export default function ForgotPasswordForm() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
+    setServerError("");
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    setLoading(false);
-    setSent(true);
+    try {
+      await authService.esqueciSenha(data.email);
+      setSent(true);
+    } catch (err) {
+      setServerError(err.response?.data?.erro || "Erro ao enviar e-mail. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (sent) {
@@ -48,6 +56,12 @@ export default function ForgotPasswordForm() {
       <p style={{ fontSize: "14px", color: "#333", marginBottom: "16px" }}>
         Informe o e-mail da sua conta para receber as instruções de recuperação.
       </p>
+
+      {serverError && (
+        <div className="amazon-error-box">
+          <span className="amazon-error-icon">⚠</span> {serverError}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="amazon-field">

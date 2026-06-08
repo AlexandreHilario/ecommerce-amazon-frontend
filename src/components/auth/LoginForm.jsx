@@ -7,6 +7,7 @@ import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/authService";
+import { usuarioService } from "@/services/usuarioService";
 import { useAuthStore } from "@/store/authStore";
 
 const schema = z.object({
@@ -31,10 +32,16 @@ export default function LoginForm() {
     setLoading(true);
     try {
       const response = await authService.login(data.email, data.senha);
-      setAuth(response.token, {
-        email: response.email,
-        role: response.role,
-      });
+      setAuth(response.token, { email: response.email, role: response.role });
+      const usuario = await usuarioService.buscarPorEmail(response.email);
+      if (usuario) {
+        setAuth(response.token, {
+          id: usuario.id,
+          email: usuario.emailUsuario,
+          nomeUsuario: usuario.nomeUsuario,
+          role: response.role,
+        });
+      }
       router.push("/");
     } catch (err) {
       const msg = err.response?.data?.message;

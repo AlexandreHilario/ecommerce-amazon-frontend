@@ -8,20 +8,19 @@ export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
 
   const rotasDeAutenticacao = ['/login', '/cadastro', '/esqueci-senha'];
-  
+
   const isAuthPage = rotasDeAutenticacao.includes(pathname);
+  const isAdminPage = pathname.startsWith('/admin');
 
   return (
     <>
-      {/* Se NÃO for página de autenticação, mostra o Header */}
-      {!isAuthPage && <Header />}
-      
+      {!isAuthPage && !isAdminPage && <Header />}
+
       <main className="flex-grow">
         {children}
       </main>
 
-      {/* Se NÃO for página de autenticação, mostra o Footer */}
-      {!isAuthPage && <Footer />}
+      {!isAuthPage && !isAdminPage && <Footer />}
     </>
   );
 }

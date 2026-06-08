@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MetricCard } from "@/components/admin/MetricCard";
-import { fetchWithAuth } from "@/lib/fecthWinthAuth";
+import { adminService } from "@/services/adminService";
 
 export default function AdminOverviewPage() {
   const [resumo, setResumo] = useState(null);
@@ -12,16 +12,20 @@ export default function AdminOverviewPage() {
     async function load() {
       try {
         const [usuarios, produtos, vendas] = await Promise.all([
-          fetchWithAuth("/Usuario/listar").then((r) => r.json()),
-          fetchWithAuth("/produtos").then((r) => r.json()),
-          fetchWithAuth("/vendas/listar").then((r) => r.json()),
+          adminService.usuarios.listar(),
+          adminService.produtos.listar(),
+          adminService.vendas.listar(),
         ]);
 
         const hoje = new Date().toISOString().slice(0, 10);
         const receitaHoje = Array.isArray(vendas)
           ? vendas
-              .filter((v) => v.dataVenda?.startsWith(hoje))
+              .filter((v) => v.criadoEm?.startsWith(hoje))
               .reduce((acc, v) => acc + (v.valorTotal ?? 0), 0)
+          : 0;
+
+        const receitaTotal = Array.isArray(vendas)
+          ? vendas.reduce((acc, v) => acc + (v.valorTotal ?? 0), 0)
           : 0;
 
         setResumo({
@@ -29,6 +33,7 @@ export default function AdminOverviewPage() {
           totalProdutos: Array.isArray(produtos) ? produtos.length : 0,
           totalVendas: Array.isArray(vendas) ? vendas.length : 0,
           receitaHoje,
+          receitaTotal,
         });
       } catch (err) {
         console.error("Erro ao carregar resumo:", err);
@@ -36,7 +41,6 @@ export default function AdminOverviewPage() {
         setLoading(false);
       }
     }
-
     load();
   }, []);
 
@@ -59,14 +63,19 @@ export default function AdminOverviewPage() {
           trend="up"
         />
         <MetricCard
+          label="Receita total"
+          value={`R$ ${resumo?.receitaTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
+          sub="Todos os pedidos"
+        />
+        <MetricCard
           label="Total de usuários"
           value={String(resumo?.totalUsuarios)}
           sub="Cadastrados na plataforma"
         />
         <MetricCard
-          label="Produtos ativos"
+          label="Produtos no catálogo"
           value={String(resumo?.totalProdutos)}
-          sub="No catálogo"
+          sub="Itens cadastrados"
         />
         <MetricCard
           label="Total de vendas"

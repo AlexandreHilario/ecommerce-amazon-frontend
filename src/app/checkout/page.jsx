@@ -1,107 +1,125 @@
 "use client";
 
-import useCartStore from "@/store/cartStore";
-import { useRouter } from "next/navigation";
-import { criarVenda } from "@/services/vendaService";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useCarrinho } from "@/hooks/useCarrinho";
+import { vendaService } from "@/services/vendaService";
+import { useAuthStore } from "@/store/authStore";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, getTotal, clearCart } = useCartStore();
-
+  const { user } = useAuthStore();
+  const { items, total, limparCarrinho } = useCarrinho();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const total = getTotal();
+  const [erro, setErro] = useState("");
+  const [vendaFinalizada, setVendaFinalizada] = useState(null);
 
   const handleFinalizar = async () => {
+    if (!user?.id) {
+      router.push("/login");
+      return;
+    }
+    setErro("");
     setLoading(true);
-    setError("");
-
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
-
-      if (!user?.id) {
-        throw new Error("Usuário não encontrado");
-      }
-
-      
-      const venda = {
-        usuarioId: user.id,
-        itens: items.map((item) => ({
-          produtoId: item.id,
-          quantidade: item.quantity,
-          precoUnitario: item.price || 0,
-        })),
-      };
-
-      await criarVenda(venda);
-
-      clearCart();
-
-      router.push("/pedidos");
+      const venda = await vendaService.finalizar(user.id);
+      await limparCarrinho();
+      setVendaFinalizada(venda);
     } catch (err) {
-      setError(err.message || "Erro ao finalizar compra");
+      setErro(err.response?.data?.erro || "Erro ao finalizar pedido. Tente novamente.");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!items || items.length === 0) {
+  if (vendaFinalizada) {
     return (
-      <div className="p-10 text-center">
-        <h1 className="text-xl font-bold">Seu carrinho está vazio</h1>
-      </div>
+      <main className="min-h-screen bg-gray-100 py-8">
+        <div className="max-w-2xl mx-auto px-4">
+          <div className="bg-white rounded-lg p-8 text-center">
+            <div className="text-6xl mb-4">✅</div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Pedido realizado!</h1>
+            <p className="text-gray-600 mb-2">
+              Pedido <strong>#{vendaFinalizada.vendaId}</strong> criado com sucesso.
+            </p>
+            <p className="text-xl font-bold text-gray-900 mb-6">
+              Total: R$ {vendaFinalizada.valorTotal?.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+            </p>
+            <p className="text-sm text-gray-500 mb-6">
+              Status: <span className="font-medium text-yellow-600">{vendaFinalizada.status}</span>
+            </p>
+            <div className="flex gap-3 justify-center">
+              <Link href="/pedidos" className="px-6 py-2 bg-[#febd69] hover:bg-[#f3a847] rounded-full font-medium text-gray-900 text-sm">
+                Ver meus pedidos
+              </Link>
+              <Link href="/produtos" className="px-6 py-2 border border-gray-300 hover:bg-gray-50 rounded-full text-sm text-gray-700">
+                Continuar comprando
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <main className="min-h-screen bg-gray-100 py-8">
+        <div className="max-w-2xl mx-auto px-4 text-center py-20">
+          <p className="text-gray-500 mb-4">Seu carrinho está vazio.</p>
+          <Link href="/produtos" className="text-[#c7511f] hover:underline text-sm">
+            Ver produtos
+          </Link>
+        </div>
+      </main>
     );
   }
 
   return (
-    <main className="max-w-5xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+    <main className="min-h-screen bg-gray-100 py-8">
+      <div className="max-w-2xl mx-auto px-4">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">Finalizar Pedido</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        {/* ITENS */}
-        <div className="md:col-span-2 space-y-4">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="border p-4 rounded-lg bg-white"
-            >
-              <p className="font-medium">
-                {item.name || "Produto"}
-              </p>
-
-              <p>Qtd: {item.quantity}</p>
-
-              <p>
-                R$ {(item.price || 0).toFixed(2)}
-              </p>
-            </div>
-          ))}
+        <div className="bg-white rounded-lg p-6 mb-4">
+          <h2 className="font-bold text-gray-800 mb-4">Itens do pedido</h2>
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="flex justify-between text-sm text-gray-700">
+                <span className="flex-1">{item.nome} <span className="text-gray-400">× {item.quantity}</span></span>
+                <span className="font-medium">
+                  R$ {(item.preco * item.quantity).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="border-t mt-4 pt-4 flex justify-between font-bold text-gray-900">
+            <span>Total</span>
+            <span>R$ {total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span>
+          </div>
         </div>
 
-      
-        <div className="border p-4 rounded-lg bg-white h-fit">
-          <h2 className="font-bold mb-4">Resumo</h2>
+        {erro && (
+          <div className="bg-red-50 border border-red-200 text-red-700 rounded p-3 text-sm mb-4">
+            ⚠ {erro}
+          </div>
+        )}
 
-          <p>
-            Total: <b>R$ {total.toFixed(2)}</b>
-          </p>
-
-          {error && (
-            <p className="text-red-500 mt-2">{error}</p>
-          )}
-
+        <div className="flex gap-3">
+          <Link
+            href="/carrinho"
+            className="flex-1 py-3 border border-gray-300 hover:bg-gray-50 rounded-full text-sm text-gray-700 text-center"
+          >
+            Voltar ao carrinho
+          </Link>
           <button
             onClick={handleFinalizar}
             disabled={loading}
-            className="w-full mt-4 bg-yellow-400 hover:bg-yellow-500 font-bold py-2 rounded"
+            className="flex-1 py-3 bg-[#febd69] hover:bg-[#f3a847] rounded-full font-medium text-gray-900 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {loading ? "Finalizando..." : "Finalizar compra"}
+            {loading ? "Processando..." : "Confirmar pedido"}
           </button>
         </div>
-
       </div>
     </main>
   );
