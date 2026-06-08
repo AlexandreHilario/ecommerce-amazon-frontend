@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
+import { ReactQueryProvider } from "@/lib/queryClient";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,12 +26,14 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AuthProvider>
-          {/* Controla quando o header e o footer devem ser exibidos */}
-          <ConditionalLayout>
-            {children}
-          </ConditionalLayout>
-        </AuthProvider>
+        <ReactQueryProvider>
+          <AuthProvider>
+            {/* Controla quando o header e o footer devem ser exibidos */}
+            <ConditionalLayout>
+              {children}
+            </ConditionalLayout>
+          </AuthProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
